@@ -4,6 +4,16 @@ services:
     image: "postgres:latest"
   redis:
     image: "redis:latest"
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - "3050:80"
+    depends_on:
+      - api
+      - client
   api:
     build:
       dockerfile: Dockerfile.dev
@@ -12,14 +22,15 @@ services:
       - /app/node_modules # do not overwrite this folder
       - ./server:/app # copy every file server to app. it's going to redirect to server folder
     environment:
-      - REDIS_HOST=redis # redis service name
-      - REDIS_PORT=6379
       - PGUSER=postgres
       - PGHOST=postgres
       - PGDATABASE=postgres
       - PGPASSWORD=postgres_password
       - PGPORT=5432
+    depends_on:
+      - postgres
   client:
+    stdin_open: true #is important for keeping the containers open for interactive control
     build:
       dockerfile: Dockerfile.dev
       context: ./client
@@ -33,3 +44,6 @@ services:
     volumes:
       - /app/node_modules
       - ./worker:/app
+    environment:
+      - REDIS_HOST=redis # redis service name
+      - REDIS_PORT=6379
