@@ -1,6 +1,6 @@
-# Multi-Container-App
-# This project is for learning docker and docker-compose etc.
+# multi-container-app
 
+## This project is for learning docker, docker-compose and nginx.
 ## Tools
   - Docker
   - docker-compose
