@@ -1,0 +1,26 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t saikat/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true saikat/react-test npm run test -- --coverage # ensure that exit with status code of either 0 or not 0
+
+after_success:
+  - docker build -t saikat/multi-client ./client
+  - docker build -t saikat/multi-nginx ./nginx
+  - docker build -t saikat/multi-server ./server
+  - docker build -t saikat/multi-worker ./worker
+  # Login to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push saikat/multi-client
+  - docker push saikat/multi-nginx
+  - docker push saikat/multi-server
+  - docker push saikat/multi-worker
+
+
+# we have to add docker id and password in travis account
