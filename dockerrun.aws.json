@@ -1,3 +1,23 @@
 {
-  "AWSEBDockerrunVersion": 2
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "client",
+      "image": "saikat/multi-client",
+      "hostname": "client",
+      "essential": false
+    },
+    {
+      "name": "server",
+      "image": "saikat/multi-server",
+      "hostname": "api",
+      "essential": false
+    },
+    {
+      "name": "worker",
+      "image": "saikat/multi-worker",
+      "hostname": "worker",
+      "essential": false
+    }
+  ]
 }
