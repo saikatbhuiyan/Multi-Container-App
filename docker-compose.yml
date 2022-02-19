@@ -22,6 +22,8 @@ services:
       - /app/node_modules # do not overwrite this folder
       - ./server:/app # copy every file server to app. it's going to redirect to server folder
     environment:
+      - REDIS_HOST=redis # redis service name
+      - REDIS_PORT=6379
       - PGUSER=postgres
       - PGHOST=postgres
       - PGDATABASE=postgres
